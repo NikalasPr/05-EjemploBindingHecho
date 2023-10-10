@@ -9,6 +9,7 @@ import android.widget.RadioButton;
 import android.widget.Toast;
 
 import nikalas.boyanov.a05_ejemplobinding.databinding.ActivityAddAlumnoBinding;
+import nikalas.boyanov.a05_ejemplobinding.modelos.Alumno;
 
 public class AddAlumnoActivity extends AppCompatActivity {
     private ActivityAddAlumnoBinding binding;

@@ -1,4 +1,4 @@
-package nikalas.boyanov.a05_ejemplobinding;
+package nikalas.boyanov.a05_ejemplobinding.modelos;
 
 import java.io.Serializable;
 
