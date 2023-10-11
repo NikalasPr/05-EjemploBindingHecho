@@ -24,8 +24,9 @@ import java.util.ArrayList;
 public class MainActivity extends AppCompatActivity {
     private ActivityMainBinding binding;
     private ActivityResultLauncher<Intent> addAlumnoLauncher;
-
+    private ActivityResultLauncher<Intent> editAlumnoLauncher;
     private ArrayList<Alumno> listaAlumnos;
+    private int posicion;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -76,6 +77,27 @@ public class MainActivity extends AppCompatActivity {
 
 
         );
+
+        editAlumnoLauncher = registerForActivityResult(
+                new ActivityResultContracts.StartActivityForResult(),
+                new ActivityResultCallback<ActivityResult>() {
+                    @Override
+                    public void onActivityResult(ActivityResult result) {
+                        if (result.getResultCode() == RESULT_OK){
+                            if (result.getData() != null && result.getData().getExtras() != null){
+                                Alumno alumno = (Alumno) result.getData().getExtras().getSerializable("ALUMNO");
+                                listaAlumnos.set(posicion, alumno);
+                                mostrarAlumnos();
+                            }
+                            //si no hay datos borro
+                            else {
+                                listaAlumnos.remove(posicion);
+                                mostrarAlumnos();
+                            }
+                        }
+                    }
+                }
+        );
     }
 
     private void mostrarAlumnos() {
@@ -95,6 +117,18 @@ public class MainActivity extends AppCompatActivity {
             TextView lbApellidos = alumnoView.findViewById(R.id.lbApellidosAlumnoView);
             TextView lbCiclos = alumnoView.findViewById(R.id.lbCicloAlumnoView);
             TextView lbGrupo = alumnoView.findViewById(R.id.lbGrupoAlumnoView);
+
+            alumnoView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    Intent intent = new Intent(MainActivity.this, EditAlumnoActivity.class);
+                    Bundle bundle = new Bundle();
+                    bundle.putSerializable("ALUMNO",alumno);
+                    intent.putExtras(bundle);
+                    posicion = listaAlumnos.indexOf(alumno);
+                    editAlumnoLauncher.launch(intent);
+                }
+            });
 
             lbNombre.setText(alumno.getNombre());
             lbApellidos.setText(alumno.getApellidos());
